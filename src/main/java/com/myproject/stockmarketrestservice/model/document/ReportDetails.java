@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ public class ReportDetails {
     private ObjectId id;
 
     @Indexed(unique = true)
+    @NotNull(message = "Report ID cannot be null")
     private UUID reportId;
 
     private Map<String, Object> financialData;

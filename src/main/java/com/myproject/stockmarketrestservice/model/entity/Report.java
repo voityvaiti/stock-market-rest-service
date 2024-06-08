@@ -1,6 +1,10 @@
 package com.myproject.stockmarketrestservice.model.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,16 +25,20 @@ public class Report {
     private UUID id;
 
     @Column(name = "report_date")
+    @PastOrPresent(message = "Report date cannot be future")
     private LocalDateTime reportDate;
 
     @Column(name = "total_revenue")
+    @Min(value = 0, message = "Total revenue must be positive or zero")
     private BigDecimal totalRevenue;
 
     @Column(name = "net_profit")
+    @Min(value = 0, message = "Net profit must be positive or zero")
     private BigDecimal netProfit;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @NotNull(message = "Company cannot be null")
     private Company company;
 
 }
