@@ -1,7 +1,6 @@
 package com.myproject.stockmarketrestservice.model.entity;
 
-import com.myproject.stockmarketrestservice.model.entity.Company;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ import java.util.UUID;
 public class Report {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "report_date")
@@ -33,4 +32,5 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
 }
