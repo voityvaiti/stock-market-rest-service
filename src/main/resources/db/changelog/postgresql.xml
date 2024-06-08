@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="user">
+        <createTable tableName="company">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="registration_number" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="user">
+        <createTable tableName="report">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="company_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="report_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_revenue" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="net_profit" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="user">
+        <addForeignKeyConstraint
+                baseColumnNames="company_id"
+                baseTableName="report"
+                constraintName="fk_report_company"
+                referencedColumnNames="id"
+                referencedTableName="company"
+                onUpdate="CASCADE"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="4" author="user">
+        <createTable tableName="usr">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="user">
+        <insert tableName="company">
+            <column name="id" value="e3b0c442-98fc-1c14-9af2-d4a7d1a02c0f"/>
+            <column name="name" value="Tech Solutions Ltd."/>
+            <column name="registration_number" value="TSL12345"/>
+            <column name="address" value="123 Tech Street, Tech City, TX"/>
+            <column name="created_at" value="2024-01-01T10:00:00"/>
+        </insert>
+        <insert tableName="company">
+            <column name="id" value="e3b0c442-98fc-1c14-9af2-d4a7d1a02c0e"/>
+            <column name="name" value="Finance Experts Inc."/>
+            <column name="registration_number" value="FEI67890"/>
+            <column name="address" value="456 Finance Avenue, Moneytown, NY"/>
+            <column name="created_at" value="2024-02-01T11:00:00"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="6" author="user">
+        <insert tableName="report">
+            <column name="id" value="f7c3bc1d-98fc-4c14-9af2-d4a7d1a02d8b"/>
+            <column name="company_id" value="e3b0c442-98fc-1c14-9af2-d4a7d1a02c0f"/>
+            <column name="report_date" value="2024-03-31T00:00:00"/>
+            <column name="total_revenue" value="500000.00"/>
+            <column name="net_profit" value="120000.00"/>
+        </insert>
+        <insert tableName="report">
+            <column name="id" value="9f86d081-98fc-4c14-9af2-d4a7d1a02c9d"/>
+            <column name="company_id" value="e3b0c442-98fc-1c14-9af2-d4a7d1a02c0e"/>
+            <column name="report_date" value="2024-03-31T00:00:00"/>
+            <column name="total_revenue" value="750000.00"/>
+            <column name="net_profit" value="250000.00"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="7" author="user">
+        <insert tableName="usr">
+            <column name="id" value="e94a7ff3-3b13-4897-bf48-467a7aa96a0e"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$8SnMIiHCu53DrUQVMRHgL.eUNQaVJ2cDn1jw3CkcKEjXQ3bj9nLOG"/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+        <insert tableName="usr">
+            <column name="id" value="1f3546d9-150b-4a08-b9fe-4bca40a15d87"/>
+            <column name="username" value="user"/>
+            <column name="password" value="$2a$10$cCbvLd.2Cb9tZ74mLnbV/uthvslLs4.eEOPQ0AU2MtKuW68/I5c5."/>
+            <column name="role" value="USER"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
