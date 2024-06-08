@@ -2,6 +2,7 @@ package com.myproject.stockmarketrestservice.security;
 
 import com.myproject.stockmarketrestservice.model.enums.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -32,6 +33,11 @@ public class WebSecurityConfig {
     private static final String USER = Role.USER.toString();
     private static final String ADMIN = Role.ADMIN.toString();
 
+    @Value("${springdoc.api-docs.path}")
+    private String docsPath;
+    @Value("${springdoc.swagger-ui.path}")
+    private String swaggerUiPath;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,6 +45,9 @@ public class WebSecurityConfig {
         return http.authorizeHttpRequests(authorize -> authorize
 
                         .antMatchers("/error").permitAll()
+
+                        .antMatchers(docsPath + "/**").permitAll()
+                        .antMatchers(swaggerUiPath + "/**").permitAll()
 
                         .antMatchers(HttpMethod.GET).hasAnyAuthority(USER, ADMIN)
                         .anyRequest().hasAuthority(ADMIN)
