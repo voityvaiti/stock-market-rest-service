@@ -11,6 +11,8 @@ import java.util.UUID;
 @Repository
 public interface ReportDetailsRepository extends MongoRepository<ReportDetails, ObjectId> {
 
+    boolean existsByReportId(UUID reportId);
+
     Optional<ReportDetails> findByReportId(UUID reportId);
 
 }

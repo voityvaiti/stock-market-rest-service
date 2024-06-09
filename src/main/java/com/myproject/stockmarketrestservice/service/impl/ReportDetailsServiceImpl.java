@@ -20,6 +20,11 @@ public class ReportDetailsServiceImpl implements ReportDetailsService {
 
 
     @Override
+    public boolean existsWithReportId(UUID id) {
+        return reportDetailsRepository.existsByReportId(id);
+    }
+
+    @Override
     public Page<ReportDetails> getAll(Pageable pageable) {
         return reportDetailsRepository.findAll(pageable);
     }

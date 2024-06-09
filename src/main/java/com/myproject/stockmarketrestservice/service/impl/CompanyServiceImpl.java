@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,6 +22,16 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyMapper companyMapper = Mappers.getMapper(CompanyMapper.class);
 
+
+    @Override
+    public boolean existByRegistrationNumber(String registrationNumber) {
+        return companyRepository.existsByRegistrationNumber(registrationNumber);
+    }
+
+    @Override
+    public Optional<Company> findByRegistrationNumber(String registrationNumber) {
+        return companyRepository.findByRegistrationNumber(registrationNumber);
+    }
 
     @Override
     public Page<Company> getAll(Pageable pageable) {

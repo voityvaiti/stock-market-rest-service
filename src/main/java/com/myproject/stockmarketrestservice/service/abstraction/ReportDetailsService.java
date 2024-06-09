@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface ReportDetailsService {
 
+    boolean existsWithReportId(UUID id);
+
     Page<ReportDetails> getAll(Pageable pageable);
 
     ReportDetails getById(ObjectId id);
