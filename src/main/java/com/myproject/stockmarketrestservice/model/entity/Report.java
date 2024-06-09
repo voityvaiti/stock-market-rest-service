@@ -25,14 +25,17 @@ public class Report {
     private UUID id;
 
     @Column(name = "report_date")
+    @NotNull(message = "Report date cannot be null")
     @PastOrPresent(message = "Report date cannot be future")
     private LocalDateTime reportDate;
 
     @Column(name = "total_revenue")
+    @NotNull(message = "Total revenue cannot be null")
     @Min(value = 0, message = "Total revenue must be positive or zero")
     private BigDecimal totalRevenue;
 
     @Column(name = "net_profit")
+    @NotNull(message = "Net profit cannot be null")
     @Min(value = 0, message = "Net profit must be positive or zero")
     private BigDecimal netProfit;
 

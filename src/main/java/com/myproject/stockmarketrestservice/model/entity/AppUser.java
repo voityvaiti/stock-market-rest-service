@@ -3,6 +3,7 @@ package com.myproject.stockmarketrestservice.model.entity;
 import com.myproject.stockmarketrestservice.model.enums.Role;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.*;
@@ -35,6 +36,7 @@ public class AppUser {
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Role cannot be null")
     private Role role;
 
 }
