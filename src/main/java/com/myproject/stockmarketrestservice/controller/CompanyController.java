@@ -2,9 +2,11 @@ package com.myproject.stockmarketrestservice.controller;
 
 import com.myproject.stockmarketrestservice.dto.request.CompanyRequestDto;
 import com.myproject.stockmarketrestservice.dto.response.CompanyResponseDto;
+import com.myproject.stockmarketrestservice.exception.UniqueConstraintsViolation;
 import com.myproject.stockmarketrestservice.mapper.CompanyMapper;
 import com.myproject.stockmarketrestservice.model.entity.Company;
 import com.myproject.stockmarketrestservice.service.abstraction.CompanyService;
+import com.myproject.stockmarketrestservice.validator.CompanyUniquenessValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ import java.util.UUID;
 public class CompanyController {
 
     private final CompanyService companyService;
+
+    private final CompanyUniquenessValidator companyUniquenessValidator;
 
     private final CompanyMapper companyMapper = Mappers.getMapper(CompanyMapper.class);
 
@@ -50,22 +54,26 @@ public class CompanyController {
 
     @Operation(summary = "Create company")
     @PostMapping
-    public ResponseEntity<CompanyResponseDto> create(@RequestBody @Valid CompanyRequestDto companyRequestDto) {
+    public ResponseEntity<CompanyResponseDto> create(@RequestBody @Valid CompanyRequestDto companyRequestDto) throws UniqueConstraintsViolation {
 
-        Company createdCompany = companyService.create(
-                companyMapper.mapToCompany(companyRequestDto)
-        );
+        Company companyToCreate = companyMapper.mapToCompany(companyRequestDto);
+
+        companyUniquenessValidator.validateNew(companyToCreate);
+
+        Company createdCompany = companyService.create(companyToCreate);
 
         return new ResponseEntity<>(companyMapper.mapToResponseDto(createdCompany), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update company", description = "Updates all fields of selected by ID company")
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyResponseDto> update(@PathVariable UUID id, @RequestBody @Valid CompanyRequestDto companyRequestDto) {
+    public ResponseEntity<CompanyResponseDto> update(@PathVariable UUID id, @RequestBody @Valid CompanyRequestDto companyRequestDto) throws UniqueConstraintsViolation {
 
-        Company updatedCompany = companyService.update(
-                id, companyMapper.mapToCompany(companyRequestDto)
-        );
+        Company companyToUpdate = companyMapper.mapToCompany(companyRequestDto);
+
+        companyUniquenessValidator.validateUpdated(id, companyToUpdate);
+
+        Company updatedCompany = companyService.update(id, companyToUpdate);
 
         return ResponseEntity.ok(companyMapper.mapToResponseDto(updatedCompany));
     }

@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +62,7 @@ class ReportControllerTest {
         reportRequestDto.setTotalRevenue(report.getTotalRevenue());
         reportRequestDto.setCompanyId(companyId);
         reportRequestDto.setNetProfit(BigDecimal.valueOf(123123));
+        reportRequestDto.setReportDate(LocalDateTime.now().minusMinutes(10));
 
         reportResponseDto.setId(reportId);
         reportResponseDto.setTotalRevenue(BigDecimal.valueOf(644));

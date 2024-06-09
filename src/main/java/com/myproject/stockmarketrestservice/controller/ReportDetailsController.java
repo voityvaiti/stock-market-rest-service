@@ -2,9 +2,11 @@ package com.myproject.stockmarketrestservice.controller;
 
 import com.myproject.stockmarketrestservice.dto.request.ReportDetailsRequestDto;
 import com.myproject.stockmarketrestservice.dto.response.ReportDetailsResponseDto;
+import com.myproject.stockmarketrestservice.exception.UniqueConstraintsViolation;
 import com.myproject.stockmarketrestservice.mapper.ReportDetailsMapper;
 import com.myproject.stockmarketrestservice.model.document.ReportDetails;
 import com.myproject.stockmarketrestservice.service.abstraction.ReportDetailsService;
+import com.myproject.stockmarketrestservice.validator.ReportDetailsUniquenessValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +30,15 @@ public class ReportDetailsController {
 
     private final ReportDetailsService reportDetailsService;
 
+    private final ReportDetailsUniquenessValidator reportDetailsUniquenessValidator;
+
     private final ReportDetailsMapper reportDetailsMapper = Mappers.getMapper(ReportDetailsMapper.class);
 
 
     @Operation(summary = "Get reports details page", description = "Returns reports details page by selected page number and page size")
     @GetMapping
     public ResponseEntity<Page<ReportDetailsResponseDto>> getAllPage(@RequestParam(defaultValue = "0", name = "page-number") Integer pageNumber,
-                                                               @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
+                                                                     @RequestParam(defaultValue = "10", name = "page-size") Integer pageSize) {
 
         Page<ReportDetails> reportDetailsPage = reportDetailsService.getAll(PageRequest.of(pageNumber, pageSize));
 
@@ -61,11 +65,13 @@ public class ReportDetailsController {
 
     @Operation(summary = "Create report details")
     @PostMapping
-    public ResponseEntity<ReportDetailsResponseDto> create(@RequestBody @Valid ReportDetailsRequestDto reportDetailsRequestDto) {
+    public ResponseEntity<ReportDetailsResponseDto> create(@RequestBody @Valid ReportDetailsRequestDto reportDetailsRequestDto) throws UniqueConstraintsViolation {
 
-        ReportDetails createdReportDetails = reportDetailsService.create(
-                reportDetailsMapper.mapToReportDetails(reportDetailsRequestDto)
-        );
+        ReportDetails reportDetailsToCreate = reportDetailsMapper.mapToReportDetails(reportDetailsRequestDto);
+
+        reportDetailsUniquenessValidator.validate(reportDetailsToCreate);
+
+        ReportDetails createdReportDetails = reportDetailsService.create(reportDetailsToCreate);
 
         return new ResponseEntity<>(reportDetailsMapper.mapToResponseDto(createdReportDetails), HttpStatus.CREATED);
     }
