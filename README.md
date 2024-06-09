@@ -36,7 +36,7 @@ Rest API that uses both SQL and NoSql databases.
 ## Requirements 
 - **Java Development Kit (JDK):** JDK 11 or later should be installed.
 - **Maven:** Maven should be installed for building and managing the project dependencies.
-- **Database** The application requires PostgreSQL and MongoDB to be installed and running. The minimum supported version is PostgreSQL 15.3 and MongoDB 6.0.15
+- **Database** The application requires PostgreSQL and MongoDB to be installed and running. The minimum supported version is PostgreSQL 15.3 and MongoDB 4.4
 - **IDE:** An Integrated Development Environment (IDE) such as IntelliJ IDEA, Eclipse, or NetBeans can be used for development.
 
 ## Running the Project
